@@ -8,7 +8,9 @@ def main():
     APP_ID, APP_SECRET = load_facebook_app_id_secret()
     since = load_last_call_timestamp()
 
-    get_new_image_urls(APP_ID, APP_SECRET, since)
+    image_urls = get_new_image_urls(APP_ID, APP_SECRET, since)
+    for image_url in image_urls:
+        print("Image: ", image_url)
 
 def load_facebook_app_id_secret():
     with open('fb_app.json', 'r') as fp:
@@ -35,14 +37,16 @@ def get_new_image_urls(APP_ID, APP_SECRET, since):
     url = url + "&fields=full_picture"
     url = url + "&since=" + str(since)
 
+    images = []
     json_data = render_to_json(url)
     for post in json_data['data']:
         try:
-            picture_url = post['full_picture']
-            print(picture_url)
+            images.append(post['full_picture'])
 
         except Exception:
-            print("Key error")
+            NOP
+
+    return images
 
 def render_to_json(graph_url):
     web_response = urllib.request.urlopen(graph_url)
