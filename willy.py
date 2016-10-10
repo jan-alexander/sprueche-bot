@@ -5,10 +5,7 @@ import json
 import time
 
 def main():
-    APP_ID, APP_SECRET = load_facebook_app_id_secret()
-    since = load_last_call_timestamp()
-
-    image_urls = get_new_image_urls(APP_ID, APP_SECRET, since)
+    image_urls = get_new_image_urls()
     for image_url in image_urls:
         print("Image: ", image_url)
 
@@ -31,7 +28,10 @@ def load_last_call_timestamp():
 
     return old_since
 
-def get_new_image_urls(APP_ID, APP_SECRET, since):
+def get_new_image_urls():
+    APP_ID, APP_SECRET = load_facebook_app_id_secret()
+    since = load_last_call_timestamp()
+
     url = "https://graph.facebook.com/v2.8/WillyNachdenklich/posts/?"
     url = url + "access_token=" + APP_ID + "|" + APP_SECRET
     url = url + "&fields=full_picture"
